@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./static:/usr/share/nginx/html:ro
+    depends_on:
+      - app1
+      - app2
+
+  app1:
+    build: ./backend/app1
+    environment:
+      - PORT=3001
+
+  app2:
+    build: ./backend/app2
+    environment:
+      - PORT=3002
+
+networks:
+  default:
+    name: nginx-net
